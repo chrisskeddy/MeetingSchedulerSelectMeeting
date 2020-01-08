@@ -1,3 +1,9 @@
+# MeetingSchedulerReact
+
+This is the react part of teh MeetingScheduler which will be built before adding the core project
+
+## Project details which was pulled from
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

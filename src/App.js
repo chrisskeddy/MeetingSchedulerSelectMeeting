@@ -36,22 +36,38 @@ function renderCalendar() {
   var daysInLastMonth = daysInMonth(lastMonth, lastMonthYear);
   var daysInCurrentMonth = daysInMonth(today.getMonth(), today.getFullYear());
   var firstWeekDay = new Date(today.getFullYear() + "-" + (today.getMonth() + 1) + "-01").getDay();
-  var lastMonthDisplay = daysInLastMonth - firstWeekDay;
+  var lastMonthDisplayDays = daysInLastMonth - firstWeekDay;
   let calendarDisplay = [];
+
+  var todayStyle = {
+    backgroundColor: '#EAEAEA'
+  }
   for (var i = 0; i < 35; ++i) {
-    if (lastMonthDisplay + i < daysInLastMonth) {
-      calendarDisplay.push(<li className="outside"><div className="date">{lastMonthDisplay + i + 1}</div></li>);
-    } else if (i - firstWeekDay + 1 <= daysInCurrentMonth) {
+    var outside = false;
+    var number = 0;
+    var isToday = false;
+    //Find number to display on calendar and which month it is from
+    if (lastMonthDisplayDays + i < daysInLastMonth) { //previous month
+      outside = true;
+      number = lastMonthDisplayDays + i + 1;
+    } else if (i - firstWeekDay + 1 <= daysInCurrentMonth) { //current month
+      number = i - firstWeekDay + 1;
       if (i - firstWeekDay + 1 === today.getDate()) {
-        var styles = {
-          backgroundColor: '#DFDFDF'
-        }
-        calendarDisplay.push(<li style={styles}><div className="date">{i - firstWeekDay + 1}</div></li>);
-      } else {
-        calendarDisplay.push(<li><div className="date">{i - firstWeekDay + 1}</div></li>);
+        isToday = true;
       }
+    } else { //next month
+      number = i - firstWeekDay - daysInCurrentMonth + 1;
+      outside = true;
+    }
+    //Create JSX for calendar display
+    if (outside) {
+      calendarDisplay.push(<li id={"li" + i} className="outside"><div className="date">{number}</div></li>);
     } else {
-      calendarDisplay.push(<li className="outside"><div className="date">{i - firstWeekDay - daysInCurrentMonth + 1}</div></li>);
+      if (isToday) {
+        calendarDisplay.push(<li id={"li" + i} style={todayStyle}><div className="date">{number}</div></li>);
+      } else {
+        calendarDisplay.push(<li id={"li" + i}><div className="date">{number}</div></li>);
+      }
     }
   }
   return calendarDisplay;

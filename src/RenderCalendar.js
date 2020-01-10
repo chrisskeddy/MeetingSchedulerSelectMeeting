@@ -132,7 +132,7 @@ function RenderCalendar() {
             Close
           </Button>
           <Button variant="primary" onClick={handleClose}>
-            Save Changes
+            Add Available
           </Button>
         </Modal.Footer>
       </Modal>

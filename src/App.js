@@ -21,40 +21,6 @@ month[11] = "December";
 
 var today = new Date();
 
-function Example() {
-  const [show, setShow] = React.useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button>
-
-      <Modal id="myModal" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Date: </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h3>Add Available Time</h3>
-          <p>Start Time:&nbsp;<input type="text" id="startTime"></input></p>
-          <p>&nbsp;End Time:&nbsp;<input type="text" id="endTime"></input></p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
-}
-
 function App() {
   return (
     <div>

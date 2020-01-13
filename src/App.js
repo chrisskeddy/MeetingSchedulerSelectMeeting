@@ -1,7 +1,6 @@
-import React from 'react';
-import RenderCalendar from './RenderCalendar';
+import React, { Component } from 'react';
+import Calendar from './components/calendar/Calendar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Modal, Button } from 'react-bootstrap';
 import './App.css';
 
 var month = new Array(11);
@@ -21,31 +20,34 @@ month[11] = "December";
 
 var today = new Date();
 
-function App() {
-  return (
-    <div>
-      <div className="container py-5">
-        <div className="calendar shadow bg-white p-5">
-          <div className="d-flex align-items-center"><i className="fa fa-calendar fa-3x mr-3"></i>
-            <h2 id="Month" className="month font-weight-bold mb-0 text-uppercase">{month[today.getMonth()]} {today.getFullYear()}</h2>
+//function App() {
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <div className="container py-5">
+          <div className="calendar shadow bg-white p-5">
+            <div className="d-flex align-items-center"><i className="fa fa-calendar fa-3x mr-3"></i>
+              <h2 id="Month" className="month font-weight-bold mb-0 text-uppercase">{month[today.getMonth()]} {today.getFullYear()}</h2>
+            </div>
+            <br></br>
+            <ol className="day-names list-unstyled">
+              <li key="sun" className="font-weight-bold text-uppercase">Sun</li>
+              <li key="mon" className="font-weight-bold text-uppercase">Mon</li>
+              <li key="tue" className="font-weight-bold text-uppercase">Tue</li>
+              <li key="wed" className="font-weight-bold text-uppercase">Wed</li>
+              <li key="thu" className="font-weight-bold text-uppercase">Thu</li>
+              <li key="fri" className="font-weight-bold text-uppercase">Fri</li>
+              <li key="sat" className="font-weight-bold text-uppercase">Sat</li>
+            </ol>
+            <ol id="days" className="days list-unstyled">
+              <Calendar />
+            </ol>
           </div>
-          <br></br>
-          <ol className="day-names list-unstyled">
-            <li className="font-weight-bold text-uppercase">Sun</li>
-            <li className="font-weight-bold text-uppercase">Mon</li>
-            <li className="font-weight-bold text-uppercase">Tue</li>
-            <li className="font-weight-bold text-uppercase">Wed</li>
-            <li className="font-weight-bold text-uppercase">Thu</li>
-            <li className="font-weight-bold text-uppercase">Fri</li>
-            <li className="font-weight-bold text-uppercase">Sat</li>
-          </ol>
-          <ol id="days" className="days list-unstyled">
-            <RenderCalendar />
-          </ol>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;

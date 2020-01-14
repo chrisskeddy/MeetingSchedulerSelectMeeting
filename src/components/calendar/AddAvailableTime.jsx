@@ -19,7 +19,8 @@ class AddAvailableTime extends Component {
       startTime: '',
       endTime: '',
       oldStartTime: '',
-      oldEndTime: ''
+      oldEndTime: '',
+      availableStyle: 'event bg-info'
     };
   }
   handleStartTimeChange(event) {
@@ -30,14 +31,23 @@ class AddAvailableTime extends Component {
   }
   updateDay() {
     this.setState({
+      availableStyle: 'event bg-info'
+    });
+    var availableTime = '';
+    if (this.state.startTime && this.state.endTime) {
+      availableTime = (
+        <div className={this.state.availableStyle}>
+          {this.state.startTime} -- {this.state.endTime}
+        </div>
+      );
+    }
+    this.setState({
       oldStartTime: this.state.startTime,
       oldEndTime: this.state.endTime,
       columnData: (
         <>
           {this.props.day}
-          <div className="event bg-success">
-            {this.state.startTime} -- {this.state.endTime}
-          </div>
+          {availableTime}
         </>
       )
     });

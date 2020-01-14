@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Calendar from './components/calendar/Calendar';
+import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -22,6 +23,9 @@ var today = new Date();
 
 //function App() {
 class App extends Component {
+
+
+
   render() {
     return (
       <div>
@@ -44,6 +48,11 @@ class App extends Component {
               <Calendar />
             </ol>
           </div>
+        </div>
+        <div className="text-center">
+          <Button variant="primary" size="lg">
+            Submit
+          </Button>
         </div>
       </div>
     );

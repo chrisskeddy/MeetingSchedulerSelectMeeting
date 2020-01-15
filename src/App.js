@@ -22,9 +22,6 @@ var today = new Date();
 
 //function App() {
 class App extends Component {
-
-
-
   render() {
     return (
       <div>
@@ -48,7 +45,10 @@ class App extends Component {
             </ol>
           </div>
         </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 4851708... don't add empty times
       </div>
     );
   }

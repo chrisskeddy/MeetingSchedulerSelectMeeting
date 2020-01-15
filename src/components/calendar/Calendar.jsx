@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import AddAvailableTime from './AddAvailableTime';
+import { Button } from 'react-bootstrap';
+
+import PropTypes from 'prop-types';
 
 var month = new Array(11);
 month[0] = 'January';
@@ -23,7 +26,38 @@ function daysInMonth(month, year) {
  *    Generates the calendar for the current month
  */
 class Calendar extends Component {
-  state = {};
+  constructor(props, context) {
+    super(props, context);
+    for (
+      var i = 0, value = 'event bg-info', size = 35, array = new Array(35);
+      i < size;
+      i++
+    ) {
+      array[i] = value;
+    }
+    this.state = {
+      submitAvailableTimes: this.props.sendAvailableTimes,
+      childClassName: array
+    };
+  }
+  resetChildClassNames() {
+    var array = this.state.childClassName;
+    for (var i = 0, size = 35; i < size; i++) {
+      array[i] = 'event bg-info';
+    }
+    this.setState(state => ({
+      childClassName: array
+    }));
+    console.log(this.state.childClassName);
+  }
+  updateChildClassName(index, className) {
+    var tmpArray = this.state.childClassName;
+    tmpArray[index] = className;
+    this.setState({
+      childClassName: tmpArray
+    });
+    console.log(this.state.childClassName);
+  }
   render() {
     var today = new Date();
     var lastMonth = today.getMonth() - 1;
@@ -74,40 +108,69 @@ class Calendar extends Component {
       }
       //Create JSX for calendar display
       const val = number;
+      const index = i;
       if (outside) {
         calendarDisplay.push(
           <AddAvailableTime
+            key={index}
+            index={index}
             className="outside"
             day={val}
             month={month[monthNumber]}
             year={year}
+            sendAvailableClassName={this.state.childClassName[index]}
+            updateColor={this.updateChildClassName.bind(this)}
           ></AddAvailableTime>
         );
       } else {
         if (isToday) {
           calendarDisplay.push(
             <AddAvailableTime
+              key={index}
+              index={index}
               className="inside"
               style={todayStyle}
               day={val}
               month={month[monthNumber]}
               year={year}
+              sendAvailableClassName={this.state.childClassName[index]}
+              updateColor={this.updateChildClassName.bind(this)}
             ></AddAvailableTime>
           );
         } else {
           calendarDisplay.push(
             <AddAvailableTime
+              key={index}
+              index={index}
               className="inside"
               day={val}
               month={month[monthNumber]}
               year={year}
+              sendAvailableClassName={this.state.childClassName[index]}
+              updateColor={this.updateChildClassName.bind(this)}
             ></AddAvailableTime>
           );
         }
       }
     }
-    return <>{calendarDisplay}</>;
+    return (
+      <>
+        {calendarDisplay}
+        <div className="text-center">
+          <Button
+            onClick={this.resetChildClassNames.bind(this)}
+            variant="primary"
+            size="lg"
+          >
+            Submit
+          </Button>
+        </div>
+      </>
+    );
   }
 }
 
+Calendar.propTypes = {
+  sendAvailableTimes: PropTypes.bool
+};
 export default Calendar;

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Calendar from './components/calendar/Calendar';
-import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -49,11 +48,7 @@ class App extends Component {
             </ol>
           </div>
         </div>
-        <div className="text-center">
-          <Button variant="primary" size="lg">
-            Submit
-          </Button>
-        </div>
+
       </div>
     );
   }

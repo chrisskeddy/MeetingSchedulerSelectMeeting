@@ -6,6 +6,27 @@ import PropTypes from 'prop-types';
  *  component that allows selecting specific time and adding it.
  */
 class AddAvailableTime extends Component {
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.sendAvailableClassName !== prevProps.sendAvailableClassName &&
+      this.props.startTime
+    ) {
+      this.fetchData(this.props.sendAvailableClassName);
+      var availableTime = (
+        <div className={this.props.sendAvailableClassName}>
+          {this.state.startTime} -- {this.state.endTime}
+        </div>
+      );
+      this.setState({
+        columnData: (
+          <>
+            {this.props.day}
+            {availableTime}
+          </>
+        )
+      });
+    }
+  }
   constructor(props, context) {
     super(props, context);
     //this.columnData = props.day;
@@ -20,7 +41,7 @@ class AddAvailableTime extends Component {
       endTime: '',
       oldStartTime: '',
       oldEndTime: '',
-      availableStyle: 'event bg-info'
+      sendAvailableClassName: props.sendAvailableClassName
     };
   }
   handleStartTimeChange(event) {
@@ -30,30 +51,32 @@ class AddAvailableTime extends Component {
     this.setState({ endTime: event.target.value });
   }
   updateDay() {
-    this.setState({
-      availableStyle: 'event bg-info'
-    });
-    var availableTime = '';
-    if (this.state.startTime && this.state.endTime) {
-      availableTime = (
-        <div className={this.state.availableStyle}>
-          {this.state.startTime} -- {this.state.endTime}
-        </div>
-      );
-    }
-    this.setState({
-      oldStartTime: this.state.startTime,
-      oldEndTime: this.state.endTime,
-      columnData: (
-        <>
-          {this.props.day}
-          {availableTime}
-        </>
-      )
-    });
+    this.props.updateColor(this.props.index, 'event bg-warning');
+    setTimeout(() => {
+      var availableTime = '';
+      if (this.state.startTime && this.state.endTime) {
+        availableTime = (
+          <div className={this.props.sendAvailableClassName}>
+            {this.state.startTime} -- {this.state.endTime}
+          </div>
+        );
+      }
+      this.setState({
+        oldStartTime: this.state.startTime,
+        oldEndTime: this.state.endTime,
+        columnData: (
+          <>
+            {this.props.day}
+            {availableTime}
+          </>
+        )
+      });
+    }, 200);
   }
   cancelInput() {
     //use timeout so the user does not see the number flicker
+    console.log(this.props.sendAvailableClassName);
+    console.log(this.state.sendAvailableClassName);
     setTimeout(() => {
       this.setState({
         startTime: this.state.oldStartTime,

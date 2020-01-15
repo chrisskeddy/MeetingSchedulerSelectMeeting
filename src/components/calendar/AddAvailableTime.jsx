@@ -40,12 +40,7 @@ class AddAvailableTime extends Component {
       startTime: '',
       endTime: '',
       oldStartTime: '',
-<<<<<<< HEAD
-      oldEndTime: '',
-      sendAvailableClassName: props.sendAvailableClassName
-=======
       oldEndTime: ''
->>>>>>> parent of 4851708... don't add empty times
     };
   }
   handleStartTimeChange(event) {
@@ -55,29 +50,6 @@ class AddAvailableTime extends Component {
     this.setState({ endTime: event.target.value });
   }
   updateDay() {
-<<<<<<< HEAD
-    this.props.updateColor(this.props.index, 'event bg-warning');
-    setTimeout(() => {
-      var availableTime = '';
-      if (this.state.startTime && this.state.endTime) {
-        availableTime = (
-          <div className={this.props.sendAvailableClassName}>
-            {this.state.startTime} -- {this.state.endTime}
-          </div>
-        );
-      }
-      this.setState({
-        oldStartTime: this.state.startTime,
-        oldEndTime: this.state.endTime,
-        columnData: (
-          <>
-            {this.props.day}
-            {availableTime}
-          </>
-        )
-      });
-    }, 200);
-=======
     this.setState({
       oldStartTime: this.state.startTime,
       oldEndTime: this.state.endTime,
@@ -90,7 +62,6 @@ class AddAvailableTime extends Component {
         </>
       )
     });
->>>>>>> parent of 4851708... don't add empty times
   }
   cancelInput() {
     //use timeout so the user does not see the number flicker

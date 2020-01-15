@@ -6,12 +6,15 @@ import PropTypes from 'prop-types';
  *  component that allows selecting specific time and adding it.
  */
 class AddAvailableTime extends Component {
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     if (
-      this.props.sendAvailableClassName !== prevProps.sendAvailableClassName &&
-      this.props.startTime
+      this.props.sendAvailableClassName !== this.state.sendAvailableClassName &&
+      this.props.startTime !== '' &&
+      this.props.endTime !== ''
     ) {
-      this.fetchData(this.props.sendAvailableClassName);
+      this.setState({
+        sendAvailableClassName: this.props.sendAvailableClassName
+      });
       var availableTime = (
         <div className={this.props.sendAvailableClassName}>
           {this.state.startTime} -- {this.state.endTime}
@@ -29,7 +32,6 @@ class AddAvailableTime extends Component {
   }
   constructor(props, context) {
     super(props, context);
-    //this.columnData = props.day;
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
@@ -40,7 +42,8 @@ class AddAvailableTime extends Component {
       startTime: '',
       endTime: '',
       oldStartTime: '',
-      oldEndTime: ''
+      oldEndTime: '',
+      sendAvailableClassName: props.sendAvailableClassName
     };
   }
   handleStartTimeChange(event) {
@@ -50,29 +53,36 @@ class AddAvailableTime extends Component {
     this.setState({ endTime: event.target.value });
   }
   updateDay() {
-    this.setState({
-      oldStartTime: this.state.startTime,
-      oldEndTime: this.state.endTime,
-      columnData: (
-        <>
-          {this.props.day}
-          <div className="event bg-success">
-            {this.state.startTime} -- {this.state.endTime}
-          </div>
-        </>
-      )
-    });
+    if (this.state.startTime && this.state.endTime) {
+      this.props.updateColor(this.props.index, 'event bg-warning');
+      this.setState({
+        sendAvailableClassName: 'event bg-warning'
+      });
+      //Add Timeout so parent updates sendAvailableClassName
+      setTimeout(() => {
+        this.setState({
+          oldStartTime: this.state.startTime,
+          oldEndTime: this.state.endTime,
+          columnData: (
+            <>
+              {this.props.day}
+              <div className={this.props.sendAvailableClassName}>
+                {this.state.startTime} -- {this.state.endTime}
+              </div>
+            </>
+          )
+        });
+      }, 200);
+    }
   }
   cancelInput() {
     //use timeout so the user does not see the number flicker
-    console.log(this.props.sendAvailableClassName);
-    console.log(this.state.sendAvailableClassName);
     setTimeout(() => {
       this.setState({
         startTime: this.state.oldStartTime,
         endTime: this.state.oldEndTime
       });
-    }, 1000);
+    }, 500);
   }
   handleClose() {
     this.setState({ show: false });

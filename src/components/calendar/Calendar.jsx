@@ -48,7 +48,6 @@ class Calendar extends Component {
     this.setState(state => ({
       childClassName: array
     }));
-    console.log(this.state.childClassName);
   }
   updateChildClassName(index, className) {
     var tmpArray = this.state.childClassName;
@@ -56,7 +55,6 @@ class Calendar extends Component {
     this.setState({
       childClassName: tmpArray
     });
-    console.log(this.state.childClassName);
   }
   render() {
     var today = new Date();

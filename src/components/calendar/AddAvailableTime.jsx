@@ -54,9 +54,9 @@ class AddAvailableTime extends Component {
   }
   updateDay() {
     if (this.state.startTime && this.state.endTime) {
-      this.props.updateColor(this.props.index, 'event bg-warning');
+      this.props.updateColor(this.props.index, 'event bg-primary');
       this.setState({
-        sendAvailableClassName: 'event bg-warning'
+        sendAvailableClassName: 'event bg-primary'
       });
       //Add Timeout so parent updates sendAvailableClassName
       setTimeout(() => {

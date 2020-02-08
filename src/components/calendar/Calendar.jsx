@@ -5,18 +5,18 @@ import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 var month = new Array(11);
-month[0] = 'January';
-month[1] = 'February';
-month[2] = 'March';
-month[3] = 'April';
+month[0] = 'Jan.';
+month[1] = 'Feb.';
+month[2] = 'Mar.';
+month[3] = 'Apr.';
 month[4] = 'May';
 month[5] = 'June';
 month[6] = 'July';
-month[7] = 'August';
-month[8] = 'September';
-month[9] = 'October';
-month[10] = 'November';
-month[11] = 'December';
+month[7] = 'Aug.';
+month[8] = 'Sept.';
+month[9] = 'Oct.';
+month[10] = 'Nov.';
+month[11] = 'Dec.';
 
 function daysInMonth(month, year) {
   return new Date(year, month, 0).getDate();
@@ -29,7 +29,7 @@ class Calendar extends Component {
   constructor(props, context) {
     super(props, context);
     for (
-      var i = 0, value = 'event bg-info', size = 35, array = new Array(35);
+      var i = 0, value = 'event bg-info', size = 42, array = new Array(42);
       i < size;
       i++
     ) {
@@ -42,7 +42,7 @@ class Calendar extends Component {
   }
   resetChildClassNames() {
     var array = this.state.childClassName;
-    for (var i = 0, size = 35; i < size; i++) {
+    for (var i = 0, size = 42; i < size; i++) {
       array[i] = 'event bg-info';
     }
     this.setState(state => ({
@@ -67,7 +67,10 @@ class Calendar extends Component {
     }
 
     var daysInLastMonth = daysInMonth(lastMonth, lastMonthYear);
-    var daysInCurrentMonth = daysInMonth(today.getMonth(), today.getFullYear());
+    var daysInCurrentMonth = daysInMonth(
+      today.getMonth() + 1,
+      today.getFullYear()
+    );
     var firstWeekDay = new Date(
       today.getFullYear() + '-' + (today.getMonth() + 1) + '-01'
     ).getDay();
@@ -77,8 +80,8 @@ class Calendar extends Component {
     var todayStyle = {
       backgroundColor: '#EAEAEA'
     };
-    //35 days to give us 5 weeks
-    for (var i = 0; i < 35; ++i) {
+    //42 days to give us 6 weeks
+    for (var i = 0; i < 42; ++i) {
       var monthNumber = today.getMonth();
       var year = today.getFullYear();
       var outside = false;
@@ -152,18 +155,57 @@ class Calendar extends Component {
       }
     }
     return (
-      <>
-        {calendarDisplay}
-        <div className="text-center">
-          <Button
-            onClick={this.resetChildClassNames.bind(this)}
-            variant="primary"
-            size="lg"
-          >
-            Submit
-          </Button>
+      <div>
+        <div className="container py-5">
+          <div className="calendar shadow bg-white p-5">
+            <div className="d-flex align-items-center">
+              <i className="fa fa-calendar fa-3x mr-3"></i>
+              <h2
+                id="Month"
+                className="month font-weight-bold mb-0 text-uppercase"
+              >
+                {month[today.getMonth()]} {today.getFullYear()} (Calendar 1)
+              </h2>
+            </div>
+            <br></br>
+            <ol className="day-names list-unstyled">
+              <li key="sun" className="font-weight-bold text-uppercase">
+                Sun
+              </li>
+              <li key="mon" className="font-weight-bold text-uppercase">
+                Mon
+              </li>
+              <li key="tue" className="font-weight-bold text-uppercase">
+                Tue
+              </li>
+              <li key="wed" className="font-weight-bold text-uppercase">
+                Wed
+              </li>
+              <li key="thu" className="font-weight-bold text-uppercase">
+                Thu
+              </li>
+              <li key="fri" className="font-weight-bold text-uppercase">
+                Fri
+              </li>
+              <li key="sat" className="font-weight-bold text-uppercase">
+                Sat
+              </li>
+            </ol>
+            <ol id="days" className="days list-unstyled">
+              {calendarDisplay}
+              <div className="text-center">
+                <Button
+                  onClick={this.resetChildClassNames.bind(this)}
+                  variant="primary"
+                  size="lg"
+                >
+                  Submit
+                </Button>
+              </div>
+            </ol>
+          </div>
         </div>
-      </>
+      </div>
     );
   }
 }

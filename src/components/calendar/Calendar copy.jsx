@@ -49,7 +49,9 @@ class Calendar extends Component {
     var lastMonthDisplayDays = daysInLastMonth - firstWeekDay;
     let calendarDisplay = [];
     //calendarDisplay.push(<Example />);
-
+    var todayStyle = {
+      backgroundColor: '#EAEAEA'
+    };
     var availiableTimesList = TestData;
     availiableTimesList.map((availableTime, index) => {
       var ymd = availableTime.starttime.split('-');
@@ -110,7 +112,6 @@ class Calendar extends Component {
         }
         return null;
       });
-      /*
       if (outside) {
         tmp = this.state.availableTimesList;
         tmp.map((availableTime, index) => {
@@ -189,10 +190,7 @@ class Calendar extends Component {
           );
         }
       }
-      */
     }
-
-    /*
     for (
       var i = 0, value = 'event bg-info', size = 42, array = new Array(42);
       i < size;
@@ -200,12 +198,11 @@ class Calendar extends Component {
     ) {
       array[i] = value;
     }
-    */
 
     this.state = {
       submitAvailableTimes: this.props.sendAvailableTimes,
       childClassName: array,
-      dayObjectArray: dayObjectArray
+      availableTimesList: availiableTimesList
     };
   }
 
@@ -219,6 +216,7 @@ class Calendar extends Component {
     }));
   }
 
+  addAvailableTime(index, availableTime) {}
   updateChildClassName(index, className) {
     var tmpArray = this.state.childClassName;
     tmpArray[index] = className;
@@ -227,20 +225,6 @@ class Calendar extends Component {
     });
   }
   render() {
-    let calendarDisplay = [];
-    for (var x = 0; x < this.state.dayObjectArray.length; ++x) {
-      calendarDisplay.push(
-        <Day
-          key={x}
-          index={x}
-          date={this.state.dayObjectArray[x].date}
-          selectedMonth={this.state.dayObjectArray[x].selectedMonth}
-          isToday={this.state.dayObjectArray[x].isToday}
-          availableTimesList={this.state.dayObjectArray[x].availableTimesList}
-        ></Day>
-      );
-    }
-    /*
     var today = new Date();
     var lastMonth = today.getMonth() - 1;
     var lastMonthYear = today.getFullYear();
@@ -377,7 +361,6 @@ class Calendar extends Component {
         }
       }
     }
-    */
     return (
       <div>
         <div className="container py-5">

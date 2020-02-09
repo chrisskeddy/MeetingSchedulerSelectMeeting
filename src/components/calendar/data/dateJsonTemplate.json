@@ -1,0 +1,17 @@
+[
+  {
+    "date": "2020-02-18",
+    "selectedMonth": true,
+    "isToday": false,
+    "availableTimesList": [
+      {
+        "className": "event bg-info",
+        "date": "2020-02-18",
+        "id": 1,
+        "calendarid": 2,
+        "starttime": "2020-02-18 12:00:00",
+        "endtime": "2020-02-18 16:00:00"
+      }
+    ]
+  }
+]

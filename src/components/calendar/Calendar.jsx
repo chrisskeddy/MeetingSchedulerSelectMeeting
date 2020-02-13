@@ -47,11 +47,8 @@ class Calendar extends Component {
       today.getFullYear() + '-' + (today.getMonth() + 1) + '-01'
     ).getDay();
     var lastMonthDisplayDays = daysInLastMonth - firstWeekDay;
-    let calendarDisplay = [];
-    //calendarDisplay.push(<Example />);
-
-    var availiableTimesList = TestData;
-    availiableTimesList.map((availableTime, index) => {
+    var availableTimesList = TestData;
+    availableTimesList.map((availableTime, index) => {
       var ymd = availableTime.starttime.split('-');
       var d = ymd[2].split(' ')[0];
       availableTime.date = ymd[0] + '-' + ymd[1] + '-' + d;
@@ -88,10 +85,7 @@ class Calendar extends Component {
       }
       const day = number;
       const index = i;
-      var tmp;
-      var availableTimesList = [];
-      availableTimesListArray[index] = [];
-      var date = year + '-';
+      let date = year + '-';
       if (monthNumber < 10) {
         date += '0';
       }
@@ -100,113 +94,56 @@ class Calendar extends Component {
         date += '0';
       }
       date += day;
+      dayObjectArray[index] = {};
       dayObjectArray[index].selectedMonth = outside;
       dayObjectArray[index].date = date;
       dayObjectArray[index].isToday = isToday;
       dayObjectArray[index].availableTimesList = [];
-      availiableTimesList.map((availableTime, index) => {
-        if (dayObjectArray[index].date === availableTime.date) {
+      //console.log(dayObjectArray[index]);
+      availableTimesList.map((availableTime, i) => {
+        if (date === availableTime.date) {
           dayObjectArray[index].availableTimesList.push(availableTime);
         }
         return null;
       });
-      /*
-      if (outside) {
-        tmp = this.state.availableTimesList;
-        tmp.map((availableTime, index) => {
-          var date = year + '-';
-          if (monthNumber < 10) {
-            date += '0';
-          }
-          date += monthNumber + 1 + '-';
-          if (day < 10) {
-            date += '0';
-          }
-          date += day;
-          if (availableTime.date === date) {
-            availableTimesListArray[index].push(availableTime);
-          }
-          return null;
-        });
-        calendarDisplay.push(
-          <Day
-            key={index}
-            index={index}
-            className="outside"
-            day={day}
-            month={month[monthNumber]}
-            year={year}
-            sendAvailableClassName={this.state.childClassName[index]}
-            updateColor={this.updateChildClassName.bind(this)}
-            availableTimesList={this.state.availableTimesListArray[index]}
-          ></Day>
-        );
-      } else {
-        tmp = this.state.availableTimesList;
-        tmp.map((availableTime, index) => {
-          var date = year + '-';
-          if (monthNumber < 10) {
-            date += '0';
-          }
-          date += monthNumber + 1 + '-';
-          if (day < 10) {
-            date += '0';
-          }
-          date += day;
-          if (availableTime.date === date) {
-            availableTimesListArray[index].push(availableTime);
-          }
-          return null;
-        });
-        if (isToday) {
-          calendarDisplay.push(
-            <Day
-              key={index}
-              index={index}
-              className="inside"
-              style={todayStyle}
-              day={day}
-              month={month[monthNumber]}
-              year={year}
-              sendAvailableClassName={this.state.childClassName[index]}
-              updateColor={this.updateChildClassName.bind(this)}
-              availableTimesList={availableTimesListArray[index]}
-            ></Day>
-          );
-        } else {
-          calendarDisplay.push(
-            <Day
-              key={index}
-              index={index}
-              className="inside"
-              day={day}
-              month={month[monthNumber]}
-              year={year}
-              sendAvailableClassName={this.state.childClassName[index]}
-              updateColor={this.updateChildClassName.bind(this)}
-              availableTimesList={availableTimesList}
-            ></Day>
-          );
-        }
-      }
-      */
     }
-
-    /*
-    for (
-      var i = 0, value = 'event bg-info', size = 42, array = new Array(42);
-      i < size;
-      i++
-    ) {
-      array[i] = value;
-    }
-    */
 
     this.state = {
       submitAvailableTimes: this.props.sendAvailableTimes,
-      childClassName: array,
       dayObjectArray: dayObjectArray
     };
+  }
+
+  postAvailableTimes() {
+    for (var i = 0; i < this.state.dayObjectArray.length; ++i) {
+      for (
+        var c = 0;
+        c < this.state.dayObjectArray[i].availableTimesList.length;
+        ++c
+      ) {
+        if (
+          this.state.dayObjectArray[i].availableTimesList[c].className ===
+          'event bg-primary'
+        ) {
+          console.log('i: ' + i + ' c: ' + c);
+          const newAvailableTimesList = {
+            ...this.state.dayObjectArray[i].availableTimesList[c],
+            className: 'event bg-info'
+          };
+          //this.setState();
+          var dayObject = this.state.dayObjectArray[i];
+          dayObject.availableTimesList[c] = newAvailableTimesList;
+          var newDayObjectArray = this.state.dayObjectArray;
+          newDayObjectArray[i] = dayObject;
+          this.setState({
+            dayObjectArray: newDayObjectArray
+          });
+
+          //this.state.dayObjectArray[i].availableTimesList[c] = newAvailableTime;
+          console.log(this.state.dayObjectArray[i].availableTimesList[c]);
+        }
+      }
+    }
   }
 
   resetChildClassNames() {
@@ -226,6 +163,47 @@ class Calendar extends Component {
       childClassName: tmpArray
     });
   }
+
+  updateAvailableTime(index, id, startTime, endTime) {
+    var dayObject = this.state.dayObjectArray[index];
+    var found = false;
+    for (var i = 0; i < dayObject.availableTimesList.length; ++i) {
+      if (dayObject.availableTimesList[i].id === id) {
+        found = true;
+        dayObject.availableTimesList[i].className = 'event bg-primary';
+        dayObject.availableTimesList[i].starttime =
+          dayObject.date + ' ' + startTime + ':00';
+        dayObject.availableTimesList[i].endtime =
+          dayObject.date + ' ' + endTime + ':00';
+      }
+    }
+    if (found === false) {
+      var availableTime = {};
+      availableTime.id = -1;
+      availableTime.className = 'event bg-primary';
+      availableTime.date = dayObject.date;
+      availableTime.starttime = dayObject.date + ' ' + startTime + ':00';
+      availableTime.endtime = dayObject.date + ' ' + endTime + ':00';
+      const newAvailableTimesList = [
+        ...dayObject.availableTimesList,
+        availableTime
+      ];
+      dayObject.availableTimesList = newAvailableTimesList;
+      const newDayObjectArray = this.state.dayObjectArray;
+      newDayObjectArray[index] = dayObject;
+      this.setState({
+        dayObjectArray: newDayObjectArray
+      });
+      //this.state.dayObjectArray[index] = dayObject;
+      //dayObject.availableTimesList.push(availableTime);
+    }
+    /*
+    this.setState({
+      dayObjectArray: this.state.dayObjectArray
+    });
+    */
+  }
+
   render() {
     let calendarDisplay = [];
     for (var x = 0; x < this.state.dayObjectArray.length; ++x) {
@@ -237,147 +215,12 @@ class Calendar extends Component {
           selectedMonth={this.state.dayObjectArray[x].selectedMonth}
           isToday={this.state.dayObjectArray[x].isToday}
           availableTimesList={this.state.dayObjectArray[x].availableTimesList}
+          updateAvailableTime={this.updateAvailableTime.bind(this)}
         ></Day>
       );
     }
-    /*
     var today = new Date();
-    var lastMonth = today.getMonth() - 1;
-    var lastMonthYear = today.getFullYear();
-    //fixes when we are on the first month
-    if (lastMonth < 0) {
-      lastMonth = 12;
-      lastMonthYear = lastMonthYear - 1;
-    }
 
-    var daysInLastMonth = daysInMonth(lastMonth, lastMonthYear);
-    var daysInCurrentMonth = daysInMonth(
-      today.getMonth() + 1,
-      today.getFullYear()
-    );
-    var firstWeekDay = new Date(
-      today.getFullYear() + '-' + (today.getMonth() + 1) + '-01'
-    ).getDay();
-    var lastMonthDisplayDays = daysInLastMonth - firstWeekDay;
-    let calendarDisplay = [];
-    //calendarDisplay.push(<Example />);
-    var todayStyle = {
-      backgroundColor: '#EAEAEA'
-    };
-    //42 days to give us 6 weeks
-    var availableTimesListArray = new Array(42);
-    for (var i = 0; i < 42; ++i) {
-      var monthNumber = today.getMonth();
-      var year = today.getFullYear();
-      var outside = false;
-      var number = 0;
-      var isToday = false;
-      //Find number to display on calendar and which month it is from
-      if (lastMonthDisplayDays + i < daysInLastMonth) {
-        monthNumber = monthNumber - 1 < 0 ? 11 : monthNumber - 1;
-        year = monthNumber === 11 ? year - 1 : year;
-        //previous month
-        outside = true;
-        number = lastMonthDisplayDays + i + 1;
-      } else if (i - firstWeekDay + 1 <= daysInCurrentMonth) {
-        //current month
-        number = i - firstWeekDay + 1;
-        if (i - firstWeekDay + 1 === today.getDate()) {
-          isToday = true;
-        }
-      } else {
-        monthNumber = monthNumber + 1 > 11 ? 0 : monthNumber + 1;
-        year = monthNumber === 0 ? year + 1 : year;
-        //next month
-        number = i - firstWeekDay - daysInCurrentMonth + 1;
-        outside = true;
-      }
-      //Create JSX for calendar display
-      const day = number;
-      const index = i;
-      var tmp;
-      var availableTimesList = [];
-      availableTimesListArray[index] = [];
-      if (outside) {
-        tmp = this.state.availableTimesList;
-        tmp.map((availableTime, index) => {
-          var date = year + '-';
-          if (monthNumber < 10) {
-            date += '0';
-          }
-          date += monthNumber + 1 + '-';
-          if (day < 10) {
-            date += '0';
-          }
-          date += day;
-          if (availableTime.date === date) {
-            availableTimesListArray[index].push(availableTime);
-          }
-          return null;
-        });
-        calendarDisplay.push(
-          <Day
-            key={index}
-            index={index}
-            className="outside"
-            day={day}
-            month={month[monthNumber]}
-            year={year}
-            sendAvailableClassName={this.state.childClassName[index]}
-            updateColor={this.updateChildClassName.bind(this)}
-            availableTimesList={this.state.availableTimesListArray[index]}
-          ></Day>
-        );
-      } else {
-        tmp = this.state.availableTimesList;
-        tmp.map((availableTime, index) => {
-          var date = year + '-';
-          if (monthNumber < 10) {
-            date += '0';
-          }
-          date += monthNumber + 1 + '-';
-          if (day < 10) {
-            date += '0';
-          }
-          date += day;
-          if (availableTime.date === date) {
-            availableTimesListArray[index].push(availableTime);
-          }
-          return null;
-        });
-        if (isToday) {
-          calendarDisplay.push(
-            <Day
-              key={index}
-              index={index}
-              className="inside"
-              style={todayStyle}
-              day={day}
-              month={month[monthNumber]}
-              year={year}
-              sendAvailableClassName={this.state.childClassName[index]}
-              updateColor={this.updateChildClassName.bind(this)}
-              availableTimesList={availableTimesListArray[index]}
-            ></Day>
-          );
-        } else {
-          calendarDisplay.push(
-            <Day
-              key={index}
-              index={index}
-              className="inside"
-              day={day}
-              month={month[monthNumber]}
-              year={year}
-              sendAvailableClassName={this.state.childClassName[index]}
-              updateColor={this.updateChildClassName.bind(this)}
-              availableTimesList={availableTimesList}
-            ></Day>
-          );
-        }
-      }
-    }
-    */
     return (
       <div>
         <div className="container py-5">
@@ -419,7 +262,7 @@ class Calendar extends Component {
               {calendarDisplay}
               <div className="text-center">
                 <Button
-                  onClick={this.resetChildClassNames.bind(this)}
+                  onClick={this.postAvailableTimes.bind(this)}
                   variant="primary"
                   size="lg"
                 >

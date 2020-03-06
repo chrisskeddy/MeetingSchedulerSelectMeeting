@@ -6,25 +6,35 @@ import PropTypes from 'prop-types';
  *  component that allows selecting specific time and adding it.
  */
 class Day extends Component {
-  componentDidUpdate() {
-    console.log('update:' + this.props.index + ' date:' + this.props.date);
-    this.generateAvailableTimesListDivs();
-    /*
-    if (this.props.availableTimesList !== this.state.availableTimesList) {
-      this.setState({
-        availableTimesList: this.props.availableTimesList
-      });
-      this.setState({
-        columnData: (
-          <>
-            {this.state.date.split('-')[2]}
-            {this.state.availableTimesListDivs}
-          </>
-        )
-      });
+  static getDerivedStateFromProps(props, state) {
+    if (props.date !== state.date) {
+      if (props.availableTimesList.length < 1) {
+        return {
+          startTime: '',
+          endTime: '',
+          date: props.date
+        };
+      }
+      var startTimeList = props.availableTimesList[0].starttime
+        .split(' ')[1]
+        .split(':');
+      //extract the hour and minute (drop the seconds)
+      var startTime = startTimeList[0] + ':' + startTimeList[1];
+      var endTimeList = props.availableTimesList[0].endtime
+        .split(' ')[1]
+        .split(':');
+      var endTime = endTimeList[0] + ':' + endTimeList[1];
+      return {
+        startTime: startTime,
+        endTime: endTime,
+        oldStartTime: startTime,
+        oldEndTime: endTime,
+        date: props.date
+      };
     }
-    */
+    return state;
   }
+
   generateAvailableTimesListDivs() {
     let availableTimesListDivs = [];
     for (var i = 0; i < this.props.availableTimesList.length; ++i) {
@@ -60,56 +70,29 @@ class Day extends Component {
     }
     return (
       <>
-        {this.state.day}
+        {this.props.date.split('-')[2]}
         {availableTimesListDivs}
       </>
     );
-    /*
-      var columnData = (
-        <>
-          {this.state.day}
-          {availableTimesListDivs}
-        </>
-      );
-      if (
-        this.state.availableTimesListDivs !== availableTimesListDivs ||
-        this.state.columnData !== columnData
-      ) {
-        this.setState({
-          availableTimesListDivs: availableTimesListDivs,
-          columnData: columnData
-        });
-      }
-    }
-      */
   }
 
   constructor(props, context) {
     super(props, context);
-    var className = 'inside';
-    if (this.props.selectedMonth) {
-      className = 'outside';
-    }
-    var style = {};
-    if (this.props.isToday) {
-      style = {
-        backgroundColor: '#EAEAEA'
-      };
-    }
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
     this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
+    this.generateAvailableTimesListDivs = this.generateAvailableTimesListDivs.bind(
+      this
+    );
     this.state = {
-      className: className,
       startTime: '',
       oldStartTime: '',
       endTime: '',
       oldEndTime: '',
       show: false,
-      date: props.date,
       day: props.date.split('-')[2],
-      style: style
+      style: this.props.isToday ? { backgroundColor: '#EAEAEA' } : {}
     };
     setTimeout(() => {
       this.generateAvailableTimesListDivs();
@@ -140,23 +123,11 @@ class Day extends Component {
       });
       */
       //Add Timeout so parent updates sendAvailableClassName
+      /*
       setTimeout(() => {
         this.generateAvailableTimesListDivs();
-        /*
-        this.setState({
-          oldStartTime: this.state.startTime,
-          oldEndTime: this.state.endTime,
-          columnData: (
-            <>
-              {this.props.day}
-              <div className={this.props.sendAvailableClassName}>
-                {this.state.startTime} -- {this.state.endTime}
-              </div>
-            </>
-          )
-        });
-        */
       }, 200);
+      */
     }
   }
   cancelInput() {
@@ -179,8 +150,8 @@ class Day extends Component {
     return (
       <>
         <li
-          className={this.state.className}
-          style={this.state.style}
+          className={this.props.selectedMonth ? 'outside' : 'inside'}
+          style={this.props.isToday ? { backgroundColor: '#EAEAEA' } : {}}
           key={this.props.date}
           onClick={this.handleShow}
         >
@@ -194,7 +165,9 @@ class Day extends Component {
           }}
         >
           <Modal.Header closeButton>
-            <Modal.Title id="modalTitle">{this.props.date}</Modal.Title>
+            <Modal.Title id="modalTitle">
+              {this.props.date} {this.state.date}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <h3>Add Available Time</h3>

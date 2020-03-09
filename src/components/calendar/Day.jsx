@@ -7,12 +7,16 @@ import PropTypes from 'prop-types';
  */
 class Day extends Component {
   static getDerivedStateFromProps(props, state) {
-    if (props.date !== state.date) {
+    if (
+      props.date !== state.date ||
+      props.availableTimesList !== state.availableTimesList
+    ) {
       if (props.availableTimesList.length < 1) {
         return {
           startTime: '',
           endTime: '',
-          date: props.date
+          date: props.date,
+          availableTimesList: props.availableTimesList
         };
       }
       var startTimeList = props.availableTimesList[0].starttime
@@ -29,7 +33,8 @@ class Day extends Component {
         endTime: endTime,
         oldStartTime: startTime,
         oldEndTime: endTime,
-        date: props.date
+        date: props.date,
+        availableTimesList: props.availableTimesList
       };
     }
     return state;

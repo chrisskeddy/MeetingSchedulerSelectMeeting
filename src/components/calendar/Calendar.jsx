@@ -70,7 +70,7 @@ class Calendar extends Component {
     var calendarId = this.getUrlVars()['calendarId'];
     console.log('calendarId=' + calendarId);
     const response = await fetch(
-      '/Calendar/AvailableTimesJSON.json?calendarId=' + calendarId
+      '/Calendar/AvailableTimesJSON?calendarId=' + calendarId
     );
     const data = await response.json();
     console.log(data);
